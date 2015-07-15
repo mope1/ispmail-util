@@ -39,5 +39,5 @@ u=virtual_users, d=virtual_domains, a=virtual_aliases
 ```
 Keep in mind that you can use catchall aliases as per the tutorial
 ```
-./admin.sh a @domain.com target@otherdomain.com
+./admin.sh a add @domain.com target@otherdomain.com
 ```
