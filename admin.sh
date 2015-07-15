@@ -1,7 +1,7 @@
 MIN_ARGS=2
 E_BADARGS=65
 if [ $# -lt $MIN_ARGS ]; then
-  echo "Usage: `basename $0` <u|d|a> <list|add|delete> [name/email] [password/id/email]"
+  echo "Usage: `basename $0` <u|d|a> <list|add|delete> [name/email/source] [password/id/email/destination]"
   echo "u=virtual_users, d=virtual_domains, a=virtual_aliases"
   exit $E_BADARGS
 fi
