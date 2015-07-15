@@ -30,7 +30,7 @@ u=virtual_users, d=virtual_domains, a=virtual_aliases
 ./admin.sh d delete domain.com
 
 ./admin.sh u list
-./admin.sh u add user@domain.com
+./admin.sh u add user@domain.com passw0rd
 ./admin.sh u delete user@domain.com
 
 ./admin.sh a list
