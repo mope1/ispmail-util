@@ -1,5 +1,5 @@
 # ispmail-util
-tiny shell script for managing the mysql database connected to the ["ispmail" dovecot/postfix setup](https://workaround.org/ispmail/wheezy setup)
+tiny shell script for managing the mysql database connected to the ["ispmail" dovecot/postfix setup for debian wheezy](https://workaround.org/ispmail/wheezy setup)
 
 Please note that I exchanged the md5 password hashes as per the comments on [that page](https://workaround.org/ispmail/wheezy/preparing-the-database) and that my script assumes that setup. Here's the changes:
 ```
