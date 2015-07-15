@@ -1,9 +1,8 @@
 # ispmail-util
 tiny shell script for managing the mysql database connected to the ["ispmail" dovecot/postfix setup](https://workaround.org/ispmail/wheezy setup)
 
-Please note that I exchanged the md5 password hashes as per the comments on [that page](https://workaround.org/ispmail/wheezy/preparing-the-database) and that my script assumes that setup: 
+Please note that I exchanged the md5 password hashes as per the comments on [that page](https://workaround.org/ispmail/wheezy/preparing-the-database) and that my script assumes that setup. Here's the changes:
 ```
-#database changes
 DROP TABLE virtual_users;
 CREATE TABLE `virtual_users` (
 `id` int(11) NOT NULL auto_increment,
@@ -14,8 +13,9 @@ PRIMARY KEY (`id`),
 UNIQUE KEY `email` (`email`),
 FOREIGN KEY (domain_id) REFERENCES virtual_domains(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-#/etc/dovecot/dovecot-sql.conf.ext
+```
+Also one line in ``/etc/dovecot/dovecot-sql.conf.ext``
+```
 default_pass_scheme = SHA512-CRYPT
 ```
 
