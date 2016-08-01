@@ -1,0 +1,54 @@
+#!/bin/sh
+
+if [ "$#" = "0" ]; then
+  echo 'Usage: ispmail u[ser]|d[omain]|a[lias] add|change|remove|list help|<argslist>'
+else
+
+  if [ "$1" = "user" -o "$1" = "u" ]; then
+    if [ "$2" = "add" ]; then
+      if [ "$3" = "help" ]; then
+        echo 'Usage: ispmail user add john.doe@exmaple.com password1234'
+      elif [ "$#" = "4" ]; then
+        virtual_domain=$(echo $3 | perl -pe 's/.*?@(.*)/\1/')
+        virtual_domain_id=$(mysql -s -e "SELECT id FROM virtual_domains WHERE name='$virtual_domain'" mailserver)
+        if [ "$virtual_domain_id" = '' }; then
+          echo "The domain $virtual_domain does not exist, please create it before assigning users to it"
+        else
+          echo "Adding user with email $3 and password $4 on virtual domain $virtual_domain with id $virtual_domain_id"
+          mysql -e "INSERT INTO virtual_users (domain_id, email, password) VALUES ( $virtual_domain_id,'$3',CONCAT('{SHA256-CRYPT}', ENCRYPT ('$4', CONCAT('\$5\$', SUBSTRING(SHA(RAND()), -16)))));" mailserver
+        fi
+          
+      fi
+    elif [ "$2" = "list" ]; then
+      mysql -e "SELECT * FROM virtual_users" mailserver
+    elif [ $2 = "change" ]; then
+      if [ "$3" = "help" ]; then
+        echo 'Usage: ispmail user change john.doe@exmaple.com newPassword1234'
+      elif [ "$#" = "4" ]; then
+        mysql -e "UPDATE virtual_users SET password=CONCAT('{SHA256-CRYPT}', ENCRYPT ('$4', CONCAT('\$5\$', SUBSTRING(SHA(RAND()), -16)))) WHERE email='$3';" mailserver
+      fi
+    elif [ "$2" = "remove" ]; then
+      if [ "$3" = "help" ]; then
+        echo 'Usage: ispmail user remove john.doe@exmaple.com'
+      elif [ "$#" = "3" ]; then
+        mysql -e "DELETE FROM virtual_users WHERE email='$3';" mailserver
+      fi 
+    fi
+  elif [ "$1" = "domain" -o "$1" = "d" ]; then
+    if [ "$2" = "add" ]; then
+      if [ "$3" = "help" ]; then
+        echo 'Usage: ispmail domain add exmaple.com'
+      elif [ "$#" = "3" ]; then
+        mysql -e "INSERT INTO virtual_domains (name) VALUES ('$3');" mailserver
+      fi
+    elif [ "$2" = "remove" ]; then
+      if [ "$3" = "help" ]; then
+        echo 'Usage: ispmail domain remove exmaple.com'
+      elif [ "$#" = "3" ]; then
+        mysql -e "DELETE FROM virtual_domains WHERE name='$3'" mailserver
+      fi
+    elif [ "$2" = "list" ]; then
+      mysql -e "SELECT * FROM virtual_domains" mailserver
+    fi  
+  fi
+fi
